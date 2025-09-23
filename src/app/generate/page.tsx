@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { ChangeEvent, useState } from "react";
 
 const Page = () => {
   const { push } = useRouter();
@@ -70,7 +69,7 @@ const Page = () => {
       <div className="w-75 flex flex-col gap-1 m-4">
         <div className="text-[20px] font-bold">Explore AI generated images</div>
         <div className="text-[14px] font-semibold text-gray-500 text-sm">
-          Describe what's on your mind. For best results, be specific
+          Describe what is on your mind. For best results, be specific
         </div>
       </div>
       <input

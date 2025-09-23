@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { icon1 } from "../../icon/Frame 85";
 
 const Page = () => {
   const { push } = useRouter();

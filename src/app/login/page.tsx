@@ -3,9 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/providers/AuthProvider";
-import { ChangeEvent, use, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const Page = () => {
   const { push } = useRouter();
@@ -80,7 +79,7 @@ const Page = () => {
           <hr className="flex-grow border-t border-gray-300 w-29.5" />
         </div>
         <div className="text-[14px] font-medium mt-5">
-          Don't have an account?
+          Don not have an account?
         </div>
         <div
           onClick={createAcc}
