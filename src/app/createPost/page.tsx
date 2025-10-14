@@ -20,7 +20,7 @@ const Page = () => {
           ></div>
           <div className="text-[16px] font-semibold w-50">New photo post</div>
         </div>
-        <hr className="flex-grow border-t border-gray-300 w-100" />
+        <hr className="flex-grow border-t border-gray-300 w-106" />
       </div>
       <div className="flex flex-col gap-3 items-center mt-70">
         <div

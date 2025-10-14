@@ -9,20 +9,31 @@ import {
   useEffect,
 } from "react";
 import { toast } from "sonner";
+import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 type userType = {
+  _id: string;
   username: string;
+  fullname: string;
   userId: string;
   email: string;
   password: string;
   profilePicture: string | null;
   createdAt: Date;
   bio: string | null;
+  followers: string | null;
+  following: string | null;
+};
+
+type decodedTokenType = {
+  data: userType;
 };
 
 type ContextType = {
   Login: (email: string, password: string) => Promise<void>;
   user: userType | undefined;
+  token: string | null | undefined;
   SetUser: Dispatch<SetStateAction<undefined | userType>>;
   SignUp: (
     email: string,
@@ -31,15 +42,20 @@ type ContextType = {
     fullname: string
   ) => Promise<void>;
 };
+
 const AuthContext = createContext<ContextType | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<userType>();
+  const [token, setToken] = useState<string | null>();
+  const { push } = useRouter();
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
+    const localToken = localStorage.getItem("token");
+    if (localToken) {
+      const decodedToken: decodedTokenType = jwtDecode(localToken);
+      setUser(decodedToken.data);
+      setToken(localToken);
     }
   }, []);
 
@@ -56,9 +72,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     if (userJson.ok) {
-      const user = await userJson.json();
-      setUser(user);
-      localStorage.setItem("user", JSON.stringify(user));
+      const token = await userJson.json();
+      localStorage.setItem("token", token);
+      setToken(token);
+      const decodedToken: decodedTokenType = jwtDecode(token);
+      setUser(decodedToken.data);
       console.log("user logged in");
       toast.success("Successfully logged in");
     } else {
@@ -87,8 +105,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     if (userJson.ok) {
-      const user = await userJson.json();
+      const res = await userJson.json();
+      localStorage.setItem("token", res);
+      setToken(res);
+      const decodedToken: decodedTokenType = jwtDecode(res);
+      setUser(decodedToken.data);
+      toast.success("Successfully user created");
       console.log("user created");
+      push("/");
+    } else {
+      toast.error("Mdkuee neg ym ni bolhoo baichla");
     }
   };
 
@@ -97,6 +123,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     user: user,
     SignUp: SignUp,
     SetUser: setUser,
+    token: token,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

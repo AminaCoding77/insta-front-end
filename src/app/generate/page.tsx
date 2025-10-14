@@ -1,19 +1,29 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { upload } from "@vercel/blob/client";
+import { useUser } from "@/providers/AuthProvider";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 
 const Page = () => {
   const { push } = useRouter();
+  const { token } = useUser();
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState(
     "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
   );
   const [isLoading, setIsloading] = useState(false);
+  const [caption, setCaption] = useState("");
 
   const API_Key = process.env.API_Key;
 
   const handle = (e: ChangeEvent<HTMLInputElement>) => {
     setPrompt(e.target.value);
+  };
+
+  const handleCaption = (e: ChangeEvent<HTMLInputElement>) => {
+    setCaption(e.target.value);
   };
 
   const Generator = async () => {
@@ -44,15 +54,43 @@ const Page = () => {
       }
 
       const blob = await response.blob();
-      const imageee = URL.createObjectURL(blob);
-      setImageUrl(imageee);
+
+      const file = new File([blob], "generated.png", { type: "image/png" });
+      const uploaded = await upload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/api/uplaod",
+      });
+
+      await setImageUrl(uploaded.url);
+
+      console.log(uploaded);
     } catch (error) {
       console.log("error error pizza");
-      // setIsloading(false);
+    }
+  };
+
+  const createPost = async () => {
+    const response = await fetch("http://localhost:5000/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        caption: caption,
+        images: [imageUrl],
+      }),
+    });
+
+    if (response.ok) {
+      push("/");
+      toast.success("Successfully created!");
+    } else {
+      toast.error("Post couldn't proceed");
     }
   };
   return (
-    <div className="flex flex-col mt-5">
+    <div className="flex flex-col mt-5 w-screen">
       <div>
         <div className="flex ml-5 gap-24 mb-4">
           <div
@@ -89,6 +127,22 @@ const Page = () => {
         Generate
       </button>
       <img src={imageUrl} className="w-90 h-120 mx-4 mt-4 rounded-sm" />
+      <Input
+        className="w-90 h-15 mx-4 mt-3 text-sm"
+        placeholder="Enter caption..."
+        value={caption}
+        onChange={(e) => {
+          handleCaption(e);
+        }}
+      />
+      <button
+        onClick={() => {
+          createPost();
+        }}
+        className="text-white w-40 bg-sky-500 hover:bg-sky-600 text-[14px] font-semibold rounded-sm text-sm px-8 py-1.5 mx-4 mt-3"
+      >
+        Create post
+      </button>
     </div>
   );
 };
