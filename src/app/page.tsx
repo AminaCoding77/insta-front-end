@@ -17,7 +17,7 @@ type AllPostType = {
   caption: string;
   like: [string];
   images: string;
-  comment: [string];
+  commentIds: [string];
   createdAt: string;
 };
 
@@ -127,8 +127,13 @@ const Home = () => {
                 <strong>{post.userId.username}</strong> {post.caption}
               </div>
             </div>
-            <div className="ml-3 mt-1 text-sm text-slate-500 font-medium">
-              View all {post.comment.length} comments
+            <div
+              onClick={() => {
+                push(`/comment/${post._id}`);
+              }}
+              className="ml-3 mt-1 text-sm text-slate-500 font-medium"
+            >
+              View all {post.commentIds.length} comments
             </div>
           </div>
         ))}
