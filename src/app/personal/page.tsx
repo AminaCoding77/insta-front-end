@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/providers/AuthProvider";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Home, PlusSquare, Search, UserCircle } from "lucide-react";
+import Footer from "../_components/Footer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Posts = {
   _id: string;
@@ -16,7 +17,6 @@ type Posts = {
 const Page = () => {
   const { user, token } = useUser();
   const [userPosts, setUserPosts] = useState<Posts[]>([]);
-  const [profilePic, setProfilePic] = useState<string | undefined>("blank.svg");
 
   const { push } = useRouter();
 
@@ -41,7 +41,7 @@ const Page = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className="flex flex-col w-screen">
+    <div className="flex flex-col w-screen h-screen">
       <div>
         <div className="flex text-[13px], font-bold text-sm justify-center mt-12 mb-3">
           {user?.username}
@@ -49,7 +49,13 @@ const Page = () => {
         <hr></hr>
       </div>
       <div className="flex gap-6 my-5 ml-4">
-        <img src={profilePic} />
+        <Avatar>
+          <AvatarImage />
+          <AvatarFallback>
+            {user?.username.charAt(0)}
+            {user?.username.charAt(1)}
+          </AvatarFallback>
+        </Avatar>
         <div className="flex flex-col gap-2">
           <div className="text-[18px] font-medium">{user?.username}</div>
           <Button
@@ -78,7 +84,7 @@ const Page = () => {
         </div>
       </div>
       <hr></hr>
-      <div className="h-150">
+      <div>
         <div className="flex w-screen">
           {userPosts.length !== 0 ? (
             userPosts?.map((post, index) => (
@@ -107,27 +113,20 @@ const Page = () => {
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-2 sticky bottom-0 bg-white">
-        <hr></hr>
-        <div className="flex justify-between mx-10 mb-2 mt-1">
-          <Home
-            onClick={() => {
-              push("/");
-            }}
-          />
-          <Search />
-          <PlusSquare
-            onClick={() => {
-              push("/createPost");
-            }}
-          />
-          <UserCircle
-            onClick={() => {
-              push("/personal");
-            }}
-          />
-        </div>
-      </div>
+      <Footer
+        home={() => {
+          push("/");
+        }}
+        search={() => {
+          push("/search");
+        }}
+        plus={() => {
+          push("/createPost");
+        }}
+        circle={() => {
+          push("/personal");
+        }}
+      />
     </div>
   );
 };

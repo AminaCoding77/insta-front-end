@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Home, Plus, PlusSquare, Search, User, UserCircle } from "lucide-react";
+import Footer from "@/app/_components/Footer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type StaType = {
   _id: string;
@@ -101,7 +102,13 @@ const Page = () => {
         <hr></hr>
       </div>
       <div className="flex gap-6 my-5 ml-4">
-        <div className="w-18 h-18"></div>
+        <Avatar className="w-25 h-25">
+          <AvatarImage src={staData?.profilePicture} />
+          <AvatarFallback className="text-[25px]">
+            {staData?.username.charAt(0)}
+            {staData?.username.charAt(1)}
+          </AvatarFallback>
+        </Avatar>
         <div className="flex flex-col gap-2">
           <div className="text-[18px] font-medium">{staData?.username}</div>
 
@@ -165,39 +172,29 @@ const Page = () => {
                 style={{ backgroundImage: "url('apple.svg')" }}
               ></div>
               <div className="text-[28px] font-sans font-extrabold mt-4 mb-4">
-                Share Photos
+                No Shared Photos
               </div>
               <div className=" font-medium w-90 text-sm text-center">
-                When you share photos, they will appear on your profile.
-              </div>
-              <div className="text-[15px] font-bold text-sky-500 mt-5">
-                Share your first photo
+                No posts to show
               </div>
             </div>
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-2 sticky bottom-0 bg-white">
-        <hr></hr>
-        <div className="flex justify-between mx-10 mb-2 mt-1">
-          <Home
-            onClick={() => {
-              push("/");
-            }}
-          />
-          <Search />
-          <PlusSquare
-            onClick={() => {
-              push("/createPost");
-            }}
-          />
-          <UserCircle
-            onClick={() => {
-              push("/personal");
-            }}
-          />
-        </div>
-      </div>
+      <Footer
+        home={() => {
+          push("/");
+        }}
+        search={() => {
+          push("/search");
+        }}
+        plus={() => {
+          push("/createPost");
+        }}
+        circle={() => {
+          push("/personal");
+        }}
+      />
     </div>
   );
 };

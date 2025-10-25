@@ -1,11 +1,19 @@
 "use client";
 import { useUser } from "@/providers/AuthProvider";
-import { Heart, HomeIcon, PlusSquare, Search, UserCircle } from "lucide-react";
+import {
+  EllipsisVertical,
+  Heart,
+  HomeIcon,
+  PlusSquare,
+  Search,
+  UserCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { EditPostDialog } from "./_components/EditPostDialog";
 
-type AllPostType = {
+export type AllPostType = {
   _id: string;
   userId: {
     _id: string;
@@ -26,6 +34,9 @@ const Home = () => {
   const { push } = useRouter();
   const [AllPosts, setAllPosts] = useState<AllPostType[]>([]);
   const [profilePic, setProfilePic] = useState<string | undefined>("blank.svg");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<AllPostType | null>(null);
+  const [caption, setCaption] = useState<string>("");
 
   const BringAllPosts = async () => {
     const JSONresponse = await fetch("http://localhost:5000/allPosts", {
@@ -48,7 +59,7 @@ const Home = () => {
     }
   }, []);
 
-  const postLike = async (postId: String) => {
+  const postLike = async (postId: string) => {
     const res = await fetch(`http://localhost:5000/toggleLike/${postId}`, {
       method: "POST",
       headers: {
@@ -67,6 +78,41 @@ const Home = () => {
 
   const strangerProfile = (staId: string) => {
     push(`/profile/${staId}`);
+  };
+
+  const deleteButton = async (id: string) => {
+    const res = await fetch(`http://localhost:5000/deletePost/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.ok) {
+      toast.success("Successfully post deleted");
+    } else {
+      toast.error("Something wrong with deleting post");
+    }
+  };
+
+  const editButton = async (id: string) => {
+    const res = await fetch(`http://localhost:5000/editButton/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        caption: caption,
+      }),
+    });
+
+    if (res.ok) {
+      toast.success("successfully updated post");
+    } else {
+      toast.error("something wrong with updating post");
+    }
   };
 
   return (
@@ -94,6 +140,30 @@ const Home = () => {
               >
                 {post?.userId?.username}
               </div>
+              {post.userId._id === user?._id ? (
+                <div className="ml-65">
+                  <div>
+                    <EllipsisVertical
+                      size={20}
+                      onClick={() => {
+                        setIsOpen(true);
+                        setSelectedPost(post);
+                      }}
+                    />
+                  </div>
+                  <EditPostDialog
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    selectedPost={selectedPost}
+                    deleteButton={() => deleteButton(post?._id)}
+                    editButton={() => editButton(post?._id)}
+                    caption={caption}
+                    setCaption={setCaption}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <img src={post?.images?.[0]} />
             <div className="flex gap-1 ml-3 mt-1">
@@ -146,7 +216,11 @@ const Home = () => {
               push("/");
             }}
           />
-          <Search />
+          <Search
+            onClick={() => {
+              push("/search");
+            }}
+          />
           <PlusSquare
             onClick={() => {
               push("/createPost");

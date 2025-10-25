@@ -27,7 +27,12 @@ const Page = () => {
           className="w-35 h-25 bg-no-repeat"
           style={{ backgroundImage: `url('frame.svg')` }}
         ></div>
-        <button className="text-white w-40 bg-sky-500 hover:bg-sky-600 font-bold rounded-sm text-sm px-7 py-2">
+        <button
+          onClick={() => {
+            push("/photo");
+          }}
+          className="text-white w-40 bg-sky-500 hover:bg-sky-600 font-bold rounded-sm text-sm px-7 py-2"
+        >
           Photo library
         </button>
         <div
