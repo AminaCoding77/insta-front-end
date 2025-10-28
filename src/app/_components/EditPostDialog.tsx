@@ -10,15 +10,15 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { AllPostType } from "../page";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useUser } from "@/providers/AuthProvider";
+import { toast } from "sonner";
 
 type PropsType = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   selectedPost: AllPostType | null;
   deleteButton: () => void;
-  editButton: () => void;
-  caption: string;
-  setCaption: Dispatch<SetStateAction<string>>;
 };
 
 export const EditPostDialog = ({
@@ -26,10 +26,28 @@ export const EditPostDialog = ({
   setIsOpen,
   selectedPost,
   deleteButton,
-  editButton,
-  caption,
-  setCaption,
 }: PropsType) => {
+  const { token } = useUser();
+  const [caption, setCaption] = useState<string>(selectedPost?.caption!);
+  const editButton = async (id: string) => {
+    const res = await fetch(`http://localhost:5000/editButton/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        caption: caption,
+      }),
+    });
+
+    if (res.ok) {
+      toast.success("successfully updated post");
+    } else {
+      toast.error("something wrong with updating post");
+    }
+  };
+
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -48,7 +66,13 @@ export const EditPostDialog = ({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={editButton}>Edit</Button>
+            <Button
+              onClick={() => {
+                editButton(selectedPost?._id!);
+              }}
+            >
+              Edit
+            </Button>
             <Button onClick={deleteButton}>Delete</Button>
             <Button
               onClick={() => {

@@ -10,9 +10,9 @@ const Page = () => {
   const { push } = useRouter();
   const { token } = useUser();
   const [prompt, setPrompt] = useState("");
-  const [imageUrl, setImageUrl] = useState(
-    "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-  );
+  const [imageUrl, setImageUrl] = useState<string[] | null>([
+    "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+  ]);
   const [isLoading, setIsloading] = useState(false);
   const [caption, setCaption] = useState("");
 
@@ -27,7 +27,10 @@ const Page = () => {
   };
 
   const Generator = async () => {
+    if (!prompt.trim()) return;
+
     setIsloading(true);
+
     try {
       const headers = {
         "Content-Type": "application/json",
@@ -61,10 +64,22 @@ const Page = () => {
         handleUploadUrl: "/api/uplaod",
       });
 
-      await setImageUrl(uploaded.url);
+      if (
+        imageUrl?.[0] ===
+        "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+      ) {
+        await setImageUrl([uploaded.url]);
+      } else {
+        await setImageUrl((prev) => {
+          return [...prev!, uploaded.url];
+        });
+      }
+
+      setIsloading(false);
 
       console.log(uploaded);
     } catch (error) {
+      setIsloading(false);
       console.log("error error pizza");
     }
   };
@@ -78,7 +93,7 @@ const Page = () => {
       },
       body: JSON.stringify({
         caption: caption,
-        images: [imageUrl],
+        images: imageUrl,
       }),
     });
 
@@ -126,7 +141,9 @@ const Page = () => {
       >
         Generate
       </button>
-      <img src={imageUrl} className="w-90 h-120 mx-4 mt-4 rounded-sm" />
+      {imageUrl?.map((url) => (
+        <img src={url} key={url} className="w-90 h-120 mx-4 mt-4 rounded-sm" />
+      ))}
       <Input
         className="w-90 h-15 mx-4 mt-3 text-sm"
         placeholder="Enter caption..."

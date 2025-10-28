@@ -12,6 +12,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { EditPostDialog } from "./_components/EditPostDialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 export type AllPostType = {
   _id: string;
@@ -24,7 +29,7 @@ export type AllPostType = {
   };
   caption: string;
   like: [string];
-  images: string;
+  images: string[];
   commentIds: [string];
   createdAt: string;
 };
@@ -36,7 +41,6 @@ const Home = () => {
   const [profilePic, setProfilePic] = useState<string | undefined>("blank.svg");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<AllPostType | null>(null);
-  const [caption, setCaption] = useState<string>("");
 
   const BringAllPosts = async () => {
     const JSONresponse = await fetch("http://localhost:5000/allPosts", {
@@ -96,25 +100,6 @@ const Home = () => {
     }
   };
 
-  const editButton = async (id: string) => {
-    const res = await fetch(`http://localhost:5000/editButton/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        caption: caption,
-      }),
-    });
-
-    if (res.ok) {
-      toast.success("successfully updated post");
-    } else {
-      toast.error("something wrong with updating post");
-    }
-  };
-
   return (
     <div>
       <div className="w-screen flex flex-col fixed top-0 bg-white">
@@ -156,16 +141,21 @@ const Home = () => {
                     setIsOpen={setIsOpen}
                     selectedPost={selectedPost}
                     deleteButton={() => deleteButton(post?._id)}
-                    editButton={() => editButton(post?._id)}
-                    caption={caption}
-                    setCaption={setCaption}
                   />
                 </div>
               ) : (
                 ""
               )}
             </div>
-            <img src={post?.images?.[0]} />
+            <Carousel>
+              <CarouselContent>
+                {post.images.map((img, index) => (
+                  <CarouselItem key={index}>
+                    <img src={img} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
             <div className="flex gap-1 ml-3 mt-1">
               <div
                 onClick={() => {
