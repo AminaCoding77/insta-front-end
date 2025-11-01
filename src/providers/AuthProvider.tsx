@@ -60,16 +60,19 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const Login = async (email: string, password: string) => {
-    const userJson = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+    const userJson = await fetch(
+      "https://ig-backend-1-iphc.onrender.com/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      }
+    );
 
     if (userJson.ok) {
       const token = await userJson.json();
@@ -91,18 +94,21 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     username: string,
     fullname: string
   ) => {
-    const userJson = await fetch("http://localhost:5000/user/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        username: username,
-        fullname: fullname,
-      }),
-    });
+    const userJson = await fetch(
+      "https://ig-backend-1-iphc.onrender.com/user/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          username: username,
+          fullname: fullname,
+        }),
+      }
+    );
 
     if (userJson.ok) {
       const res = await userJson.json();
