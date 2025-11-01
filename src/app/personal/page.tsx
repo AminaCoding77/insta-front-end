@@ -21,13 +21,16 @@ const Page = () => {
   const { push } = useRouter();
 
   const Getpost = async () => {
-    const response = await fetch(`http://localhost:5000/posts`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/posts`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const jsonResponse = await response.json();
     setUserPosts(jsonResponse);

@@ -43,13 +43,16 @@ const Home = () => {
   const [selectedPost, setSelectedPost] = useState<AllPostType | null>(null);
 
   const BringAllPosts = async () => {
-    const JSONresponse = await fetch("http://localhost:5000/allPosts", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const JSONresponse = await fetch(
+      "https://ig-backend-1-iphc.onrender.com/allPosts",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const response = await JSONresponse.json();
     await setAllPosts(response);
@@ -64,13 +67,16 @@ const Home = () => {
   }, []);
 
   const postLike = async (postId: string) => {
-    const res = await fetch(`http://localhost:5000/toggleLike/${postId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/toggleLike/${postId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       toast.success("Successfully processed");
@@ -85,13 +91,16 @@ const Home = () => {
   };
 
   const deleteButton = async (id: string) => {
-    const res = await fetch(`http://localhost:5000/deletePost/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/deletePost/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       toast.success("Successfully post deleted");

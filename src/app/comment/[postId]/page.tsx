@@ -61,13 +61,16 @@ const Page = () => {
   const { push } = useRouter();
 
   const bringPostComment = async () => {
-    const res = await fetch(`http://localhost:5000/bringComments/${postId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/bringComments/${postId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       const jsonRes = await res.json();
@@ -78,13 +81,16 @@ const Page = () => {
   };
 
   const BringPost = async () => {
-    const res = await fetch(`http://localhost:5000/bringPostOnly/${postId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/bringPostOnly/${postId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       const jsonRes = await res.json();
@@ -104,17 +110,20 @@ const Page = () => {
   };
 
   const Comment = async (postId: string | undefined) => {
-    const res = await fetch("http://localhost:5000/createComment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        post: postId,
-        comment: input,
-      }),
-    });
+    const res = await fetch(
+      "https://ig-backend-1-iphc.onrender.com/createComment",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          post: postId,
+          comment: input,
+        }),
+      }
+    );
 
     if (res.ok) {
       toast.success("Successfully commented");

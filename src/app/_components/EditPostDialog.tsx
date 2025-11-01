@@ -30,16 +30,19 @@ export const EditPostDialog = ({
   const { token } = useUser();
   const [caption, setCaption] = useState<string>(selectedPost?.caption!);
   const editButton = async (id: string) => {
-    const res = await fetch(`http://localhost:5000/editButton/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        caption: caption,
-      }),
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/editButton/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          caption: caption,
+        }),
+      }
+    );
 
     if (res.ok) {
       toast.success("successfully updated post");

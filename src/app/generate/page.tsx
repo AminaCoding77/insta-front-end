@@ -85,17 +85,20 @@ const Page = () => {
   };
 
   const createPost = async () => {
-    const response = await fetch("http://localhost:5000/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        caption: caption,
-        images: imageUrl,
-      }),
-    });
+    const response = await fetch(
+      "https://ig-backend-1-iphc.onrender.com/post",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          caption: caption,
+          images: imageUrl,
+        }),
+      }
+    );
 
     if (response.ok) {
       push("/");

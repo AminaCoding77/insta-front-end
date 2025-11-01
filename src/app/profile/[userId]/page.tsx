@@ -39,13 +39,16 @@ const Page = () => {
   const { push } = useRouter();
 
   const userFollow = async () => {
-    const res = await fetch(`http://localhost:5000/toggleFollow/${userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/toggleFollow/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       toast.success("Successfully updated followers");
@@ -55,12 +58,15 @@ const Page = () => {
   };
 
   const userPost = async () => {
-    const res = await fetch(`http://localhost:5000/StaPosts/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/StaPosts/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (res.ok) {
       const response = await res.json();
@@ -71,12 +77,15 @@ const Page = () => {
   };
 
   const userData = async () => {
-    const res = await fetch(`http://localhost:5000/StaData/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `https://ig-backend-1-iphc.onrender.com/StaData/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (res.ok) {
       const response = await res.json();

@@ -36,7 +36,7 @@ const Page = () => {
 
   const bringResults = async () => {
     const users = await fetch(
-      `http://localhost:5000/bringResults/${inputValue}`,
+      `https://ig-backend-1-iphc.onrender.com/bringResults/${inputValue}`,
       {
         method: "GET",
         headers: {
