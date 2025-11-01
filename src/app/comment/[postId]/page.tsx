@@ -53,7 +53,7 @@ type PostSingle = {
 const Page = () => {
   const params = useParams();
   const postId = params.postId as string;
-  const [post, setPost] = useState<CommentPostType[] | null>(null);
+  const [post, setPost] = useState<CommentPostType[]>([]);
   const [input, setInput] = useState("");
   const [postSingle, setPostSingle] = useState<PostSingle>();
 
@@ -163,7 +163,7 @@ const Page = () => {
 
         <hr></hr>
         <div>
-          {post?.length! > 0 ? (
+          {post?.length > 0 ? (
             post?.map((comment) => (
               <div key={comment._id} className="flex my-3 mx-6 gap-4">
                 <Avatar>

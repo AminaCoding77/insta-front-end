@@ -40,7 +40,21 @@ const Home = () => {
   const [AllPosts, setAllPosts] = useState<AllPostType[]>([]);
   const [profilePic, setProfilePic] = useState<string | undefined>("blank.svg");
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<AllPostType | null>(null);
+  const [selectedPost, setSelectedPost] = useState<AllPostType>({
+    _id: "string",
+    userId: {
+      _id: " string",
+      username: "string",
+      email: "string",
+      bio: "string",
+      followers: ["string"],
+    },
+    caption: "string",
+    like: ["hello"],
+    images: ["stirng"],
+    commentIds: ["string"],
+    createdAt: "string",
+  });
 
   const BringAllPosts = async () => {
     const JSONresponse = await fetch(

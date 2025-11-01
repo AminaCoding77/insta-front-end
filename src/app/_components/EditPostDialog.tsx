@@ -17,7 +17,7 @@ import { toast } from "sonner";
 type PropsType = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  selectedPost: AllPostType | null;
+  selectedPost: AllPostType;
   deleteButton: () => void;
 };
 
@@ -28,7 +28,7 @@ export const EditPostDialog = ({
   deleteButton,
 }: PropsType) => {
   const { token } = useUser();
-  const [caption, setCaption] = useState<string>(selectedPost?.caption!);
+  const [caption, setCaption] = useState<string>(selectedPost.caption);
   const editButton = async (id: string) => {
     const res = await fetch(
       `https://ig-backend-1-iphc.onrender.com/editButton/${id}`,
@@ -65,13 +65,13 @@ export const EditPostDialog = ({
               }
             />
             <DialogDescription>
-              Likes: {selectedPost?.like.length}
+              Likes: {selectedPost.like.length}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
               onClick={() => {
-                editButton(selectedPost?._id!);
+                editButton(selectedPost._id);
               }}
             >
               Edit
