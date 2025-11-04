@@ -35,6 +35,7 @@ const Page = () => {
   };
 
   const bringResults = async () => {
+    if (inputValue === "") return;
     const users = await fetch(
       `https://ig-backend-1-iphc.onrender.com/bringResults/${inputValue}`,
       {

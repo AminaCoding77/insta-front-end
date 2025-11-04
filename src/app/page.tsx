@@ -17,6 +17,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export type AllPostType = {
   _id: string;
@@ -26,6 +27,7 @@ export type AllPostType = {
     email: string;
     bio: string;
     followers: [string];
+    profilePicture: string;
   };
   caption: string;
   like: [string];
@@ -48,6 +50,7 @@ const Home = () => {
       email: "string",
       bio: "string",
       followers: ["string"],
+      profilePicture: "string",
     },
     caption: "string",
     like: ["hello"],
@@ -136,10 +139,13 @@ const Home = () => {
         {AllPosts?.map((post, index) => (
           <div key={index}>
             <div className="flex gap-2 items-center mx-4 my-2">
-              <img
-                className="w-9 h-9 bg-no-repeat rounded-full"
-                src={profilePic}
-              />
+              <Avatar className="w-11 h-11">
+                <AvatarImage src={post.userId?.profilePicture} />
+                <AvatarFallback className="text-[15px]">
+                  {post.userId?.username.charAt(0)}
+                  {post.userId?.username.charAt(1)}
+                </AvatarFallback>
+              </Avatar>
               <div
                 onClick={() => {
                   strangerProfile(post.userId._id);
@@ -197,10 +203,22 @@ const Home = () => {
                   </div>
                 )}
               </div>
-              <div
-                className="w-6 h-6 bg-no-repeat"
-                style={{ backgroundImage: "url('comment.svg')" }}
-              ></div>
+              <div className="flex gap-1">
+                <div
+                  className="w-6 h-6 bg-no-repeat"
+                  style={{ backgroundImage: "url('comment.svg')" }}
+                  onClick={() => {
+                    push(`/comment/${post._id}`);
+                  }}
+                ></div>
+                <div
+                  onClick={() => {
+                    push(`/comment/${post._id}`);
+                  }}
+                >
+                  {post.commentIds.length}
+                </div>
+              </div>
             </div>
             <div className="ml-3 text-sm font-bold mt-1">
               {post.like.length} likes

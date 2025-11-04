@@ -67,12 +67,16 @@ const Page = () => {
     <div className="flex flex-col items-center w-screen h-fit">
       <div className="w-screen flex flex-col gap-3 mt-3">
         <div className="w-screen flex px-8 gap-25">
-          <X />
+          <X
+            onClick={() => {
+              push("/");
+            }}
+          />
           <div className="font-medium">Photo library</div>
         </div>
         <hr></hr>
       </div>
-      <div className="flex flex-col gap-10 mt-10">
+      <div className="flex flex-col gap-7 mt-10">
         <div className="flex flex-col gap-5 bg-gray-100 p-5 rounded-xl">
           <div>Share your ideas by sharing images:</div>
           <Input
@@ -105,15 +109,19 @@ const Page = () => {
             }}
           />
         </div>
-        <div className="w-40 h-50 rounded">{image && <img src={image} />}</div>
-        <div>
-          <Button
-            className="w-40 text-white bg-sky-500 font-bold rounded-lg text-sm"
-            variant="secondary"
-            onClick={createPost}
-          >
-            Post
-          </Button>
+        <div className="flex gap-2">
+          <div className="w-50 h-60 rounded">
+            {image && <img src={image} />}
+          </div>
+          <div>
+            <Button
+              className="w-40 text-white bg-sky-500 font-bold rounded-lg text-sm"
+              variant="secondary"
+              onClick={createPost}
+            >
+              Post
+            </Button>
+          </div>
         </div>
       </div>
       <Footer
