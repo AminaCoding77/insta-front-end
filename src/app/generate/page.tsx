@@ -5,7 +5,6 @@ import { upload } from "@vercel/blob/client";
 import { useUser } from "@/providers/AuthProvider";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-
 const Page = () => {
   const { push } = useRouter();
   const { token } = useUser();
@@ -27,61 +26,38 @@ const Page = () => {
   };
 
   const Generator = async () => {
-    if (!prompt.trim()) return;
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      body: JSON.stringify({ prompt }),
+    });
 
     setIsloading(true);
 
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${API_Key}`,
-      };
+    if (!response.ok) throw new Error("Failed to generate");
 
-      const response = await fetch(
-        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-        {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify({
-            inputs: prompt,
-            parameters: {
-              negative_prompt: "blury, bad quality, distorted",
-              num_inference_steps: 20,
-              guidance_scale: 7.5,
-            },
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+    const blob = await response.blob();
 
-      const blob = await response.blob();
+    const file = new File([blob], "generated.png", { type: "image/png" });
 
-      const file = new File([blob], "generated.png", { type: "image/png" });
-      const uploaded = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/uplaod",
+    const uploaded = await upload(file.name, file, {
+      access: "public",
+      handleUploadUrl: "/api/uplaod",
+    });
+
+    if (
+      imageUrl?.[0] ===
+      "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+    ) {
+      await setImageUrl([uploaded.url]);
+    } else {
+      await setImageUrl((prev) => {
+        return [...prev!, uploaded.url];
       });
-
-      if (
-        imageUrl?.[0] ===
-        "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-      ) {
-        await setImageUrl([uploaded.url]);
-      } else {
-        await setImageUrl((prev) => {
-          return [...prev!, uploaded.url];
-        });
-      }
-
-      setIsloading(false);
-
-      console.log(uploaded);
-    } catch (error) {
-      setIsloading(false);
-      console.log("error error pizza");
     }
+
+    setIsloading(false);
+
+    console.log(uploaded);
   };
 
   const createPost = async () => {
