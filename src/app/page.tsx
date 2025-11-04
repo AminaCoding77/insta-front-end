@@ -212,6 +212,7 @@ const Home = () => {
                   }}
                 ></div>
                 <div
+                  className="font-bold"
                   onClick={() => {
                     push(`/comment/${post._id}`);
                   }}
