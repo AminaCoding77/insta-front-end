@@ -139,7 +139,7 @@ const Home = () => {
         {AllPosts?.map((post, index) => (
           <div key={index}>
             <div className="flex gap-2 items-center mx-4 my-2">
-              <Avatar className="w-11 h-11">
+              <Avatar className="w-10 h-10">
                 <AvatarImage src={post.userId?.profilePicture} />
                 <AvatarFallback className="text-[15px]">
                   {post.userId?.username.charAt(0)}
@@ -194,7 +194,7 @@ const Home = () => {
                 {post.like.includes(user!._id) ? (
                   <div className="flex gap-1">
                     <Heart color="red" fill="red" />
-                    <div>{post.like.length}</div>
+                    <div className="font-bold">{post.like.length}</div>
                   </div>
                 ) : (
                   <div className="flex gap-1">

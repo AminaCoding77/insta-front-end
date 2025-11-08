@@ -19,7 +19,7 @@ type userType = {
   userId: string;
   email: string;
   password: string;
-  profilePicture: string | null;
+  profilePicture: string | Blob;
   createdAt: Date;
   bio: string | null;
   followers: string | null;

@@ -28,7 +28,14 @@ const Page = () => {
 
   const handleCancel = () => {
     setInputValue("");
+    setResults([]);
   };
+
+  useEffect(() => {
+    if (inputValue === "") {
+      setResults([]);
+    }
+  }, [inputValue]);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);

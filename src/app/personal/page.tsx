@@ -52,8 +52,8 @@ const Page = () => {
         <hr></hr>
       </div>
       <div className="flex gap-6 my-5 ml-4">
-        <Avatar>
-          <AvatarImage />
+        <Avatar className="w-20 h-20">
+          <AvatarImage src={user?.profilePicture} />
           <AvatarFallback>
             {user?.username.charAt(0)}
             {user?.username.charAt(1)}
